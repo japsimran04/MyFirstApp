@@ -6,14 +6,22 @@
  */
 
 import React from 'react';
+
+import { useState } from 'react'
+
+
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   useColorScheme,
   View,
+  Button,
+  Pressable,
+  Modal,
 } from 'react-native';
 
 import {
@@ -23,6 +31,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import TodoForm from './TodoForm.jsx';
+import TodoList from './TodoList.jsx';
 
 
 function Section({children, title}) {
@@ -58,6 +69,42 @@ function App() {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  // Intialize the state variable to hold the TodoList
+
+  const [ toDoList, setToDoList] = useState([
+    {id:1, text:'Do laundary', isComplete: false},
+    {id:2, text:'Go to gym', isComplete: false},
+    {id:3, text:'Walk dog', isComplete: false},
+
+  ]);
+
+  //Initialize a state variable to store the new task 
+  const [newTask, setNewtask ] = useState('');
+
+  //Define a function to add a new task to the to-do list
+  const handleAddTask = () => {
+    //Create a new task object
+    const task = {
+      id: toDoList.Length + 1,
+      text: newTask,
+      isComplete: false,
+    }; 
+
+     //Update the to-do-list with the new task
+     setToDoList([...toDoList, task]);
+    //Clear the new task input
+    setNewtask('');
+  }
+    //Define a function to mark a task as complete
+    const handleCompleteTask = (id) => {
+      setToDoList( (prevList) => 
+        prevList.map((task) =>
+        task.id === id ? {...task, isComplete: !task.isComplete} : task)
+      );
+    };
+
+  
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -72,20 +119,20 @@ function App() {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.jsx</Text> to change this
-            screen and then come back to see your edits.
+          <Section title="To do form">
+            <View>
+              <TodoForm 
+              newTask={newTask}
+              setNewTask={setNewtask}
+              handleAddTask={handleAddTask}
+              ></TodoForm>
+            </View>
           </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
+
+
+          <Section title="To do List">
+          <TodoList toDoList={toDoList} handleCompleteTask={handleCompleteTask}></TodoList>
           </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
       </ScrollView>
     </SafeAreaView>
