@@ -4,15 +4,16 @@ import { Text, View, Pressable, Button } from 'react-native';
 function TodoList({ tasks, handleCompleteTask }) {
     return (
         <View>
-            {tasks.map((task) => (
-                <View
-                 key={task.id}
-                 style= {{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginBottom: 5,
-                }}
-            >
+            {/*add the to do list here*/}
+            {toDoList.map((task) => (
+              <View
+              key={task.id}
+              style={{
+                flexDirection: 'row',
+                justifyContent:'space-between',
+                marginBottom: 5,
+              }}
+              >
                 <Pressable
                     key={task.id}
                     onPress={() => handleCompleteTask(task.id)}
